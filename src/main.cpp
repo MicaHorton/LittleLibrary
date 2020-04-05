@@ -28,7 +28,6 @@ void loop() {
   outState = digitalRead(outButton);
 
   unsigned long currentMillis = millis();
- 
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
     Serial.println(books); 
