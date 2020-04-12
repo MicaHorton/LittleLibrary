@@ -14,7 +14,7 @@
   created 25 Nov 2012
   by Tom Igoe
   adapted to WiFi AP by Adafruit
-*/
+
 
 #include <SPI.h>
 #include <WiFiNINA.h>
@@ -169,3 +169,4 @@ void loop() {
   };
   
 }
+*/
