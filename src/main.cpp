@@ -1,3 +1,4 @@
+/*
 #include <Arduino.h>
 
 int const inButton = 7;
@@ -53,7 +54,7 @@ void loop() {
 
   
 }
-
+*/
 
 
 
