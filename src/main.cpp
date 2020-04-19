@@ -1,9 +1,25 @@
 #include <SPI.h>
 #include <WiFiNINA.h>
 #include <arduino_secrets.h>
+#include <Arduino.h>
 using namespace std;
 
- 
+ // BUTTONS
+int const inButton = 7;
+int inState = 0;
+int inLastState = 1;
+int const inLED = 8;
+
+int const outButton = 11;
+int outState = 0;
+int outLastState = 1;
+int const outLED = 12;
+
+int books = 0;
+unsigned long previousMillis = 0;        
+const long interval = 100; 
+
+// WIFI
 char ssid[] = SECRET_SSID;  // Service Set Identifier ie. WiFi name. Is a WPA/WPA2 Personal Network
 char pass[] = SECRET_PASS;
 
@@ -12,6 +28,13 @@ int status = WL_IDLE_STATUS;
 WiFiServer server(80);
 
 void setup() {
+    // BUTTONS
+    pinMode(inButton, INPUT_PULLUP);
+    pinMode(outButton, INPUT_PULLUP);
+    pinMode(inLED, OUTPUT);
+    pinMode(outLED, OUTPUT);
+
+    // WIFI
     Serial.begin(9600);
     while (!Serial) {;}
   
@@ -46,15 +69,33 @@ void setup() {
 
 void loop() {
     WiFiClient client = server.available();
-    client.println("HELLO WORLD");
+    inState = digitalRead(inButton);
+    outState = digitalRead(outButton);
 
-    /*
-    if (client) {
-        if (!alreadyConnected) {
-            client.println("Hello, client!");
-            alreadyConnected = true;
-        }
-    }*/
+    unsigned long currentMillis = millis();
+    if (currentMillis - previousMillis >= interval) {
+        previousMillis = currentMillis;
+        client.println(books); 
+
+        if (inState == LOW) {
+        digitalWrite(inLED, HIGH);
+        if (inState != inLastState) books++;
+        } else {
+        digitalWrite(inLED, LOW);
+        };
+        
+        if (outState == LOW) {
+        digitalWrite(outLED, HIGH);
+        if (outState != outLastState) books--;
+        } else {
+        digitalWrite(outLED, LOW);
+        };
+
+        inLastState = inState;
+        outLastState = outState; 
+
+    }; 
+
     
   
 }
